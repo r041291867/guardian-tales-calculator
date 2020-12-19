@@ -93,11 +93,24 @@
       total: {
         type: Number,
         default: 0,
-      }
+      },
+      level: {
+        type: [Number,String],
+        default: 0,
+      },
+      points: {
+        type: [Number,String],
+        default: 0,
+      },
+      target: {
+        type: [Number,String],
+        default: 0,
+      },
     },
 
     computed: {
       target_point() {
+        this.$emit('change', this.current_level, this.current_point, this.target_level)
         return this.totalExp(this.target_level) - this.totalExp(this.current_level) - this.current_point
       },
       achieve_time() {
@@ -152,6 +165,10 @@
     },
 
     mounted() {
+      this.current_level = this.level
+      this.current_point = this.points
+      this.target_level = this.target
+
       this.timer = setInterval(() => {
         this.current_time = new Date(); // 修改数据date
       }, 1000)

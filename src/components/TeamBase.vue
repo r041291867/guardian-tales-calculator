@@ -132,20 +132,16 @@
         '', '角色原生星數', '角色目前星數', '角色突破數', '是否有專武', '專武突破數', '生產點數'
       ],
       datas: [],
-      charInfo: {
-        title: '',
-        rarity: 3,
-        grade: 5,
-        limit_break: 0,
-        special_weapon: 0,
-        weapon_limit_break: 0,
-      },
     }),
 
     props: {
       num: {
         type: [Number, String],
         default: 1,
+      },
+      data: {
+        type: Array,
+        default: () => [],
       }
     },
 
@@ -155,7 +151,7 @@
         for (let d of this.datas) {
           total += this.countPoints(d)
         }
-        this.$emit('change', total, this.num)
+        this.$emit('change', total, this.num, this.datas)
         return total
       },
     },
@@ -179,15 +175,29 @@
     },
 
     mounted() {
-      for (let i=0;i<4;i++) {
-        this.datas.push({
-          title: '角色' + (i+1),
-          rarity: 3,
-          grade: 5,
-          limit_break: 0,
-          special_weapon: 0,
-          weapon_limit_break: 0,
+      if (this.data.length > 0) {
+        this.data.forEach(char => {
+          this.datas.push({
+            title: char.title,
+            rarity: char.rarity,
+            grade: char.grade,
+            limit_break: char.limit_break,
+            special_weapon: char.special_weapon,
+            weapon_limit_break: char.weapon_limit_break,
+          })
         })
+      }
+      else {
+        for (let i=0;i<4;i++) {
+          this.datas.push({
+            title: '角色' + (i+1),
+            rarity: 3,
+            grade: 5,
+            limit_break: 0,
+            special_weapon: 0,
+            weapon_limit_break: 0,
+          })
+        }
       }
     }
   }
