@@ -1,0 +1,194 @@
+<template>
+  <v-card
+    elevation="1"
+  >
+    <v-card-title>
+      Team {{ num }}
+      <v-spacer></v-spacer>
+      <span class="text-subtitle-1">
+        每小時生產
+        <strong style="color: red;">{{ totalPoints }}</strong>
+      </span>
+    </v-card-title>
+
+    <v-divider></v-divider>
+
+    <div>
+      <v-row>
+        <v-col>
+          <!-- 左邊標題 -->
+          <div
+            v-for="col in cols"
+            :key="col"
+            class="content"
+            style="text-align: right;"
+          >
+            {{ col }}
+          </div>
+        </v-col>
+        <v-col
+          v-for="(char, char_index) in datas"
+          :key="char.title"
+        >
+          <div
+            v-for="(key, index) in Object.keys(char)"
+            :key="key+index"
+            class="content"
+            style="text-align: center;"
+          >
+            <div v-if="index == 0">
+              {{ char[key] }}
+            </div>
+            <div v-else-if="index == 1">
+              <v-btn-toggle
+                v-model="char[key]"
+                tile
+                color="primary"
+                group
+                dense
+              >
+                <v-btn
+                  small
+                  :value="2"
+                >
+                  2星
+                </v-btn>
+                <v-btn
+                  small
+                  :value="3"
+                >
+                  3星
+                </v-btn>
+              </v-btn-toggle>
+            </div>
+            <div v-else-if="index == 4">
+              <v-btn-toggle
+                v-model="char[key]"
+                tile
+                color="primary"
+                group
+                dense
+              >
+                <v-btn
+                  small
+                  :value="0"
+                >
+                  無
+                </v-btn>
+                <v-btn
+                  small
+                  :value="1"
+                >
+                  有
+                </v-btn>
+              </v-btn-toggle>
+            </div>
+            <div v-else>
+              <v-btn
+                icon
+                small
+                @click="minus(char_index, key)"
+              >
+                <v-icon>mdi-minus</v-icon>
+              </v-btn>
+
+              {{ char[key] }}
+
+              <v-btn
+                icon
+                small
+                @click="add(char_index, key)"
+              >
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </div>
+          </div>
+          <div
+            class="content"
+            style="text-align: center;"
+          >
+            <strong>
+              {{ countPoints(char) }}
+            </strong>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+  </v-card>
+</template>
+
+<style>
+  .content {
+    height: 40px;
+    line-height: 40px;
+    padding: 5px;
+  }
+</style>
+
+<script>
+  export default {
+    data: () => ({
+      cols: [
+        '', '角色原生星數', '角色目前星數', '角色突破數', '是否有專武', '專武突破數', '生產點數'
+      ],
+      datas: [],
+      charInfo: {
+        title: '',
+        rarity: 3,
+        grade: 5,
+        limit_break: 0,
+        special_weapon: 0,
+        weapon_limit_break: 0,
+      },
+    }),
+
+    props: {
+      num: {
+        type: [Number, String],
+        default: 1,
+      }
+    },
+
+    computed: {
+      totalPoints() {
+        let total = 0
+        for (let d of this.datas) {
+          total += this.countPoints(d)
+        }
+        this.$emit('change', total, this.num)
+        return total
+      },
+    },
+
+    methods: {
+      add(char, key) {
+        if (this.datas[char][key] < 5) this.datas[char][key]++
+      },
+      minus(char, key) {
+        if (this.datas[char][key] > 0) this.datas[char][key]--
+      },
+      countPoints({rarity, grade, limit_break, special_weapon, weapon_limit_break}) {
+        // IF(B4=2, 30+ (B5-B4)*3 + B6*6 + 30*B7 + B8*6 , 300+(B5-B4)*60+B6*60+B7*300+B8*60)
+        if (rarity === 2) {
+          return 30 + (grade - rarity)*3 + limit_break*6 + 30*special_weapon + weapon_limit_break*6
+        }
+        else if (rarity === 3) {
+          return 300 + (grade - rarity)*60 + limit_break*60 + special_weapon*300 + weapon_limit_break*60
+        }
+      },
+    },
+
+    mounted() {
+      for (let i=0;i<4;i++) {
+        this.datas.push({
+          title: '角色' + (i+1),
+          rarity: 3,
+          grade: 5,
+          limit_break: 0,
+          special_weapon: 0,
+          weapon_limit_break: 0,
+        })
+      }
+    }
+  }
+</script>
