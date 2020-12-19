@@ -28,7 +28,7 @@
         </v-col>
         <v-col
           v-for="(char, char_index) in datas"
-          :key="char.title"
+          :key="`key-${char_index}`"
         >
           <div
             v-for="(key, index) in Object.keys(char)"
@@ -36,8 +36,17 @@
             class="content"
             style="text-align: center;"
           >
-            <div v-if="index == 0">
-              {{ char[key] }}
+            <div
+              v-if="index == 0"
+            >
+              <!-- <span>
+                {{ char[key] }}
+              </span> -->
+              <input
+                v-model="char[key]"
+                style="text-align: center; width: 60%;"
+                type="text"
+              >
             </div>
             <div v-else-if="index == 1">
               <v-btn-toggle
@@ -132,6 +141,7 @@
         '', '角色原生星數', '角色目前星數', '角色突破數', '是否有專武', '專武突破數', '生產點數'
       ],
       datas: [],
+      dialog: false,
     }),
 
     props: {
