@@ -9,5 +9,8 @@ module.exports = {
       args[0].title = "Guardian Tales Calculator";
       return args;
     })
-  }
+  },
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/guardian-tales-calculator/'
+  : '/',
 }
