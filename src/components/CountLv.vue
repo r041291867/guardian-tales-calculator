@@ -1,6 +1,7 @@
 <template>
   <v-card
     elevation="1"
+    light
   >
     <v-card-title>
       Total

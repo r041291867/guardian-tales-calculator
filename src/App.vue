@@ -11,6 +11,13 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn
+        icon
+        class="hidden-lg-and-up"
+        @click="$store.commit('toggleDrawer')"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -32,5 +39,16 @@ export default {
   data: () => ({
     //
   }),
+
+  computed: {
+    drawer: {
+      get () {
+        return this.$store.state.drawer
+      },
+      set () {
+        this.$store.commit('toggleDrawer')
+      },
+    },
+  }
 };
 </script>
