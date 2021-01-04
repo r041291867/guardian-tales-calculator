@@ -32,9 +32,10 @@
       </v-btn>
     </v-row>
 
+    <!-- PC寬度 -->
     <div
       :style="`height: ${viewHeight}px;position: fixed; overflow: scroll; width: 57%`"
-      class="hidden-md-and-down"
+      v-if="viewWidth>=1280"
     >
       <div
         v-for="i in counts"
@@ -49,10 +50,10 @@
       </div>
     </div>
 
-
+    <!-- 平板寬度 -->
     <div
       :style="`height: ${viewHeight}px;position: fixed; overflow: scroll;width: 95%`"
-      class="hidden-lg-and-up"
+      v-else-if="viewWidth>=660"
     >
       <div
         v-for="i in counts"
@@ -63,16 +64,41 @@
           :num="i"
           :data="allData[i-1]"
           @change="getValue"
-          class="hidden-sm-and-down"
-        />
-
-        <team-mobile
-          :num="i"
-          :data="allData[i-1]"
-          @change="getValue"
-          class="hidden-md-and-up"
         />
       </div>
+    </div>
+
+    <!-- 手機 -->
+    <div
+      :style="`height: ${viewHeight}px;position: fixed; overflow: scroll;width: 95%`"
+      v-else
+    >
+      <v-tabs
+        v-model="tab"
+        center-active
+        show-arrows
+      >
+        <v-tab
+          v-for="i in counts"
+          :key="i"
+        >
+          Team {{ i }}
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab">
+        <v-tab-item
+          v-for="i in counts"
+          :key="i"
+          style="padding: 10px;"
+        >
+          <team-mobile
+            :num="i"
+            :data="allData[i-1]"
+            @change="getValue"
+            class="hidden-sm-and-up"
+          />
+        </v-tab-item>
+      </v-tabs-items>
     </div>
   </div>
 </template>
@@ -85,11 +111,13 @@
     },
 
     data: () => ({
+      tab: 0,
       counts: 1,
       totalPoints: [0],
       sumPoint: 0,
       allData: [[]],
       viewHeight: document.documentElement.clientHeight - 134,
+      viewWidth: document.documentElement.clientWidth,
     }),
 
     methods: {
@@ -125,6 +153,8 @@
     mounted() {
       window.addEventListener('resize', ()=> {
         this.viewHeight = document.documentElement.clientHeight - 134
+        this.viewWidth = document.documentElement.clientWidth
+        console.log(this.viewWidth)
       })
       let cache = localStorage.getItem('data')
       let points = localStorage.getItem('total')

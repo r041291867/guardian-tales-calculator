@@ -39,9 +39,6 @@
             <div
               v-if="index == 0"
             >
-              <!-- <span>
-                {{ char[key] }}
-              </span> -->
               <input
                 v-model="char[key]"
                 style="text-align: center; width: 60%;"
