@@ -172,7 +172,7 @@
       countPoints({rarity, grade, limit_break, special_weapon, weapon_limit_break}) {
         // IF(B4=2, 30+ (B5-B4)*3 + B6*6 + 30*B7 + B8*6 , 300+(B5-B4)*60+B6*60+B7*300+B8*60)
         if (rarity === 2) {
-          return 30 + (grade - rarity)*3 + limit_break*6 + 30*special_weapon + weapon_limit_break*6
+          return 150 + (grade - rarity)*21 + limit_break*30 + special_weapon*150 + weapon_limit_break*30
         }
         else if (rarity === 3) {
           return 300 + (grade - rarity)*60 + limit_break*60 + special_weapon*300 + weapon_limit_break*60
