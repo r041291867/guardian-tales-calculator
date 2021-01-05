@@ -6,10 +6,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     drawer: false,
+    switchs: false,
   },
   mutations: {
     toggleDrawer: (state) => {
       state.drawer = !state.drawer
+    },
+    toggleSwitch: (state, val) => {
+      state.switchs = val
     }
   },
   actions: {

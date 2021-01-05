@@ -3,8 +3,6 @@
     elevation="1"
   >
     <v-card-title>
-      Team {{ num }}
-      <v-spacer></v-spacer>
       <span class="text-subtitle-1">
         每小時生產
         <strong style="color: red;">{{ totalPoints }}</strong>
@@ -122,7 +120,6 @@
         </v-col>
       </v-row>
     </div>
-
   </v-card>
 </template>
 
@@ -141,6 +138,7 @@
         '', '原生星數', '目前星數', '突破數', '是否有專武', '專武突破數', '生產點數'
       ],
       datas: [],
+      product: 0,
     }),
 
     props: {
@@ -151,7 +149,7 @@
       data: {
         type: Array,
         default: () => [],
-      }
+      },
     },
 
     computed: {

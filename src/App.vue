@@ -11,6 +11,17 @@
 
       <v-spacer></v-spacer>
 
+      <v-switch
+        class="hidden-lg-and-up"
+        v-model="switch1"
+        :label="switch1? '完整計算': '簡易計算'"
+        hide-details
+        dense
+        style="padding: 4px 0 0 20px; margin:0;"
+      ></v-switch>
+
+      <v-spacer></v-spacer>
+
       <v-btn
         icon
         class="hidden-lg-and-up"
@@ -47,6 +58,14 @@ export default {
       },
       set () {
         this.$store.commit('toggleDrawer')
+      },
+    },
+    switch1: {
+      get () {
+        return this.$store.state.switchs
+      },
+      set (val) {
+        this.$store.commit('toggleSwitch', val)
       },
     },
   }

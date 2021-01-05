@@ -5,7 +5,9 @@
     <v-card-title>
       Team {{ num }}
       <v-spacer></v-spacer>
-      <span class="text-subtitle-1">
+      <span
+        class="text-subtitle-1"
+      >
         每小時生產
         <strong style="color: red;">{{ totalPoints }}</strong>
       </span>
@@ -13,7 +15,7 @@
 
     <v-divider></v-divider>
 
-    <div>
+    <div v-show="switchs">
       <v-row>
         <v-col>
           <!-- 左邊標題 -->
@@ -120,6 +122,19 @@
         </v-col>
       </v-row>
     </div>
+
+    <div
+      v-show="!switchs"
+      class="pa-5"
+      style="text-align: center;"
+    >
+      <span>每小時生產：</span>
+      <input
+        v-model="products"
+        style="text-align: center; width: 50%;"
+        type="number"
+      >
+    </div>
   </v-card>
 </template>
 
@@ -138,6 +153,7 @@
         '', '原生星數', '目前星數', '突破數', '是否有專武', '專武突破數', '生產點數'
       ],
       datas: [],
+      products: 0
     }),
 
     props: {
@@ -148,17 +164,31 @@
       data: {
         type: Array,
         default: () => [],
+      },
+      switchs: {
+        type: Boolean,
+        default: false,
+      },
+      product: {
+        type: [Number, String],
+        default: 0,
       }
     },
 
     computed: {
       totalPoints() {
-        let total = 0
-        for (let d of this.datas) {
-          total += this.countPoints(d)
+        if (this.switchs) {
+          let total = 0
+          for (let d of this.datas) {
+            total += this.countPoints(d)
+          }
+          this.$emit('change', total, this.num, this.datas)
+          return total
         }
-        this.$emit('change', total, this.num, this.datas)
-        return total
+        else {
+          this.$emit('change', this.products, this.num)
+          return this.products
+        }
       },
     },
 
@@ -181,6 +211,7 @@
     },
 
     mounted() {
+      this.products = this.product
       if (this.data.length > 0) {
         this.data.forEach(char => {
           this.datas.push({
