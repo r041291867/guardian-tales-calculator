@@ -221,6 +221,7 @@
       }
       if (pointsS) {
         this.totalPointsSimple = JSON.parse(pointsS)
+        this.counts = this.totalPointsSimple.length
       }
       this.switch1 = sw == 'true'? true: false
     }
